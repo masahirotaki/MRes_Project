@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WorkflowBuilder Version="2.4.0"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:al="clr-namespace:Bonsai.Audio;assembly=Bonsai.Audio"
+                 xmlns:res="clr-namespace:Bonsai.Resources;assembly=Bonsai.System"
+                 xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns="https://bonsai-rx.org/2018/workflow">
+  <Workflow>
+    <Nodes>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="al:CreateAudioContext">
+          <al:SampleRate>0</al:SampleRate>
+          <al:Refresh>0</al:Refresh>
+          <al:Position>
+            <al:X>0</al:X>
+            <al:Y>0</al:Y>
+            <al:Z>0</al:Z>
+          </al:Position>
+          <al:Velocity>
+            <al:X>0</al:X>
+            <al:Y>0</al:Y>
+            <al:Z>0</al:Z>
+          </al:Velocity>
+          <al:Direction>
+            <al:X>-0</al:X>
+            <al:Y>-0</al:Y>
+            <al:Z>-1</al:Z>
+          </al:Direction>
+          <al:Up>
+            <al:X>0</al:X>
+            <al:Y>1</al:Y>
+            <al:Z>0</al:Z>
+          </al:Up>
+          <al:Gain>1</al:Gain>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="al:AudioResources">
+          <al:Buffers />
+          <al:Sources>
+            <al:SourceConfiguration>
+              <al:Name>Source</al:Name>
+              <al:Direction>
+                <al:X>0</al:X>
+                <al:Y>0</al:Y>
+                <al:Z>0</al:Z>
+              </al:Direction>
+              <al:Position>
+                <al:X>0</al:X>
+                <al:Y>0</al:Y>
+                <al:Z>0</al:Z>
+              </al:Position>
+              <al:Velocity>
+                <al:X>0</al:X>
+                <al:Y>0</al:Y>
+                <al:Z>0</al:Z>
+              </al:Velocity>
+              <al:Looping>false</al:Looping>
+              <al:Relative>false</al:Relative>
+              <al:State>Initial</al:State>
+            </al:SourceConfiguration>
+          </al:Sources>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="res:LoadResources" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:CameraCapture">
+          <cv:Index>0</cv:Index>
+          <cv:CaptureProperties />
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:Crop">
+          <cv:RegionOfInterest>
+            <cv:X>52</cv:X>
+            <cv:Y>65</cv:Y>
+            <cv:Width>129</cv:Width>
+            <cv:Height>129</cv:Height>
+          </cv:RegionOfInterest>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:Grayscale" />
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:BackgroundSubtraction">
+          <cv:BackgroundFrames>1</cv:BackgroundFrames>
+          <cv:AdaptationRate>1</cv:AdaptationRate>
+          <cv:ThresholdValue>10</cv:ThresholdValue>
+          <cv:ThresholdType>Binary</cv:ThresholdType>
+          <cv:SubtractionMethod>Absolute</cv:SubtractionMethod>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="NestedWorkflow">
+        <Name>NormalizedSum</Name>
+        <Description>Computes the proportion of pixels in the area that are above the threshold.</Description>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:Sum" />
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Val0</Selector>
+            </Expression>
+            <Expression xsi:type="Divide">
+              <Operand xsi:type="DoubleProperty">
+                <Value>255</Value>
+              </Operand>
+            </Expression>
+            <Expression xsi:type="MemberSelector">
+              <Selector>Width,Height</Selector>
+            </Expression>
+            <Expression xsi:type="Multiply" />
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Zip" />
+            </Expression>
+            <Expression xsi:type="Divide" />
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="0" To="4" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="6" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source2" />
+            <Edge From="6" To="7" Label="Source1" />
+            <Edge From="7" To="8" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="GreaterThan">
+        <Operand xsi:type="DoubleProperty">
+          <Value>0.1</Value>
+        </Operand>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:DistinctUntilChanged" />
+      </Expression>
+      <Expression xsi:type="Condition">
+        <Name>RisingEdge</Name>
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="WorkflowInput">
+              <Name>Source1</Name>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+      <Expression xsi:type="SelectMany">
+        <Name>PlaySound</Name>
+        <Description />
+        <Workflow>
+          <Nodes>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:FunctionGenerator">
+                <dsp:BufferLength>8820</dsp:BufferLength>
+                <dsp:Frequency>400</dsp:Frequency>
+                <dsp:Waveform>Sine</dsp:Waveform>
+                <dsp:SampleRate>8820</dsp:SampleRate>
+                <dsp:Amplitude>1</dsp:Amplitude>
+                <dsp:Offset>0</dsp:Offset>
+                <dsp:Phase>0</dsp:Phase>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:Shift">
+                <dsp:Offset>
+                  <dsp:X>-4410</dsp:X>
+                  <dsp:Y>0</dsp:Y>
+                </dsp:Offset>
+                <dsp:BorderType>Constant</dsp:BorderType>
+                <dsp:FillValue>
+                  <dsp:Val0>0</dsp:Val0>
+                  <dsp:Val1>0</dsp:Val1>
+                  <dsp:Val2>0</dsp:Val2>
+                  <dsp:Val3>0</dsp:Val3>
+                </dsp:FillValue>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="dsp:ConvertScale">
+                <dsp:Depth xsi:nil="true" />
+                <dsp:Scale>1000</dsp:Scale>
+                <dsp:Shift>0</dsp:Shift>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="al:AudioPlayback">
+                <al:SourceName>Source</al:SourceName>
+                <al:SampleRate>44100</al:SampleRate>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Delay">
+                <rx:DueTime>PT0.15S</rx:DueTime>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="Combinator">
+              <Combinator xsi:type="rx:Take">
+                <rx:Count>1</rx:Count>
+              </Combinator>
+            </Expression>
+            <Expression xsi:type="WorkflowOutput" />
+          </Nodes>
+          <Edges>
+            <Edge From="0" To="1" Label="Source1" />
+            <Edge From="1" To="2" Label="Source1" />
+            <Edge From="2" To="3" Label="Source1" />
+            <Edge From="3" To="4" Label="Source1" />
+            <Edge From="4" To="5" Label="Source1" />
+            <Edge From="5" To="6" Label="Source1" />
+          </Edges>
+        </Workflow>
+      </Expression>
+    </Nodes>
+    <Edges>
+      <Edge From="0" To="1" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="4" To="5" Label="Source1" />
+      <Edge From="5" To="6" Label="Source1" />
+      <Edge From="6" To="7" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
+      <Edge From="10" To="11" Label="Source1" />
+    </Edges>
+  </Workflow>
+</WorkflowBuilder>
