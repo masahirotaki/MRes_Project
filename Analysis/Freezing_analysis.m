@@ -3,7 +3,7 @@
 cd 'C:\Users\masah\OneDrive\Documents\GitHub\MRes_Project\Bonsai\Freezing_detection'
 files2import = dir('Immobility*.csv')
 
-%% Immobility calculation (put each immobility epoch into one cell for later analysis )
+%% Immobility detection (put each immobility epoch into one cell for later analysis )
 immobility = cell(1,length(files2import));
 
 for filei = 1:length(files2import)

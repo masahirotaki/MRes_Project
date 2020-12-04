@@ -16,14 +16,104 @@ void setup() {
   Serial.begin(115200);
 }
 
+
+void fearsound()
+{
+  unsigned long time_now = millis();
+  while(millis() < time_now + 1000){
+  }
+        
+  digitalWrite(TTLsoundcue, HIGH);       
+  digitalWrite(TTLsoundA, LOW);  
+  digitalWrite(TTLsoundB, LOW);     
+  digitalWrite(TTLshock, LOW);  
+  time_now = millis();
+  while(millis() < time_now + 2000){
+  }
+
+  digitalWrite(TTLsoundcue, LOW);         
+  digitalWrite(TTLsoundA, LOW); 
+  digitalWrite(TTLsoundB, LOW);     
+  digitalWrite(TTLshock, LOW); 
+  time_now = millis();
+  while(millis() < time_now + 2000){
+  }
+
+  digitalWrite(TTLsoundcue, LOW);         
+  digitalWrite(TTLsoundA, HIGH); 
+  digitalWrite(TTLsoundB, LOW);     
+  digitalWrite(TTLshock, LOW); 
+  time_now = millis();
+  while(millis() < time_now + 4500){
+  }
+
+  digitalWrite(TTLsoundcue, LOW);         
+  digitalWrite(TTLsoundA, HIGH);  
+  digitalWrite(TTLsoundB, LOW);    
+  digitalWrite(TTLshock, HIGH); 
+  time_now = millis();
+  while(millis() < time_now + 500){
+  }
+
+  digitalWrite(TTLsoundcue, LOW);         
+  digitalWrite(TTLsoundA, LOW);
+  digitalWrite(TTLsoundB, LOW);      
+  digitalWrite(TTLshock, LOW);
+  time_now = millis();
+  while(millis() < time_now + 2000){
+  }
+}
+
+
+void safesound()
+{
+  unsigned long time_now = millis();
+  while(millis() < time_now + 1000){
+  }
+        
+  digitalWrite(TTLsoundcue, HIGH); 
+  digitalWrite(TTLsoundA, LOW);        
+  digitalWrite(TTLsoundB, LOW);      
+  digitalWrite(TTLshock, LOW); 
+  time_now = millis();
+  while(millis() < time_now + 2000){
+  }
+
+  digitalWrite(TTLsoundcue, LOW); 
+  digitalWrite(TTLsoundA, LOW);        
+  digitalWrite(TTLsoundB, LOW);      
+  digitalWrite(TTLshock, LOW); 
+  time_now = millis();
+  while(millis() < time_now + 2000){
+  }
+
+  digitalWrite(TTLsoundcue, LOW);
+  digitalWrite(TTLsoundA, LOW);         
+  digitalWrite(TTLsoundB, HIGH);      
+  digitalWrite(TTLshock, LOW); 
+  time_now = millis();
+  while(millis() < time_now + 5000){
+  }
+
+  digitalWrite(TTLsoundcue, LOW); 
+  digitalWrite(TTLsoundA, LOW);        
+  digitalWrite(TTLsoundB, LOW);      
+  digitalWrite(TTLshock, LOW);
+  time_now = millis();
+  while(millis() < time_now + 2000){
+  }
+}
+
+
 void loop() 
 {  
-  if (Serial.available() > 0) {
+  if (Serial.available()) {
   {
     incomingBonsai = Serial.read();
-  }
     
-  if (incomingBonsai == 1)
+  }
+   if (incomingBonsai == 1)
+    sss
     unsigned long time_now = millis();
     while(millis() < time_now + 1000){
     }
