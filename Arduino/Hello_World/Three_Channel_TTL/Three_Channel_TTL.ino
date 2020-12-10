@@ -113,7 +113,6 @@ void loop()
     
   }
    if (incomingBonsai == 1)
-    sss
     unsigned long time_now = millis();
     while(millis() < time_now + 1000){
     }

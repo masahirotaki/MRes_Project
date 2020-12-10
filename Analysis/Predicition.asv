@@ -1,0 +1,35 @@
+%% Ventral hippocampus activity
+xlabel = {'A','A*','B*','B'};
+x = [1, 2, 3, 4];
+y1 = [0.01, 0.03, 0.97, 0.99];
+y2 = [0.98, 0.97, 0.04, 0.01];
+
+figure(1),clf
+subplot(1,2,1)
+plot(x,y1,'o-b')
+set(set(gca,'XTick',1:4,'XTickLabel',xlabel))
+hold on
+plot(x,y2,'o-r')
+title('Predicted Ventral CA1 respond to different stimuli')
+ylim([-0.05, 1.05])				%... and y-limits.
+ylabel('Populational Vector Correlation')
+legend('Compare to Stimulus A','Compare to Stimulus B')
+
+%% Auditory cortex activity
+
+xlabel = {'A','A*','B*','B'};
+x = [1, 2, 3, 4];
+y1 = [0.32, 0.54, 0.79, 0.99];
+y2 = [0.98, 0.77, 0.51, 0.2];
+
+subplot(1,2,2)
+plot(x,y1,'o-b')
+set(set(gca,'XTick',1:4,'XTickLabel',xlabel))
+hold on
+plot(x,y2,'o-r')
+title('Predicted auditory cortical respond to different stimuli')
+ylim([-0.05, 1.05])				%... and y-limits.
+ylabel('Populational Vector Correlation')
+legend('Compare to Stimulus A','Compare to Stimulus B')
+
+

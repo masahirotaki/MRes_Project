@@ -1,10 +1,10 @@
 const int TTL1 = 4;
 const int TTL2 = 7;
 const int TTL3 = 8;
-int TTL4 = 2;
+int TTL4 = 12;
 int response;
 int state = 0;
-char data; 
+char data;
 char door = '0';
 
 void safesound()
@@ -38,7 +38,7 @@ void setup() {
   pinMode(TTL1,OUTPUT);
   pinMode(TTL2, OUTPUT);         
   pinMode(TTL3, OUTPUT); 
-  pinMode(TTL4,INPUT_PULLUP);                   
+  pinMode(TTL4,INPUT);                  
   Serial.begin(9600);
 }
 
@@ -49,14 +49,15 @@ void loop()
   if (digitalRead(TTL4) == LOW && door == '0')
   {
     door = '1';
-    delay(1000);
-    Serial.println('1');
+    Serial.println(door);
+    delay(500);
   }
 
   if (state == 1)
   {
     response = 0;
     state = 0;
+
   }
   
   else if (state == 0)
@@ -65,13 +66,8 @@ void loop()
         response = 0;
         state = 1;
         safesound();  
-        delay(1000);
-    
-        fearsound(); 
-        delay(5000);
     }  
 }
-
 
 void serialEvent()
 {
@@ -83,9 +79,5 @@ void serialEvent()
     {  
       response = 1;
     }  
-  }
-  if (digitalRead(TTL4) == HIGH)
-  {
-    door = '0';
   }
 }
