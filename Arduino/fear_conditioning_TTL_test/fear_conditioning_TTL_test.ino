@@ -1,7 +1,7 @@
 const int TTL1 = 4;
 const int TTL2 = 7;
 const int TTL3 = 8;
-int TTL4 = 2;
+int TTL4 = 12;
 int response;
 int state = 0;
 char data; 
@@ -38,7 +38,7 @@ void setup() {
   pinMode(TTL1,OUTPUT);
   pinMode(TTL2, OUTPUT);         
   pinMode(TTL3, OUTPUT); 
-  pinMode(TTL4,INPUT_PULLUP);                   
+  pinMode(TTL4,INPUT);                   
   Serial.begin(9600);
 }
 
@@ -46,11 +46,16 @@ void setup() {
 void loop() 
 {  
   digitalWrite(TTL1, HIGH); 
-  if (digitalRead(TTL4) == LOW && door == '0')
+  if (digitalRead(TTL4) == HIGH && door == '0')
   {
     door = '1';
     delay(1000);
     Serial.println('1');
+  }
+
+  if (digitalRead(TTL4) == LOW)
+  {
+  door = '0';    
   }
 
   if (state == 1)
@@ -83,9 +88,5 @@ void serialEvent()
     {  
       response = 1;
     }  
-  }
-  if (digitalRead(TTL4) == HIGH)
-  {
-    door = '0';
   }
 }
