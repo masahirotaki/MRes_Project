@@ -3,8 +3,9 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:cv="clr-namespace:Bonsai.Vision;assembly=Bonsai.Vision"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
-                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
+                 xmlns:dsp="clr-namespace:Bonsai.Dsp;assembly=Bonsai.Dsp"
+                 xmlns:scr="clr-namespace:Bonsai.Scripting;assembly=Bonsai.Scripting"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -165,6 +166,9 @@
           <Value>450000</Value>
         </Operand>
       </Expression>
+      <Expression xsi:type="PublishSubject">
+        <Name>Immobile</Name>
+      </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="rx:Zip" />
       </Expression>
@@ -256,13 +260,58 @@
           <cv:ResizeInterpolation>NearestNeighbor</cv:ResizeInterpolation>
         </Combinator>
       </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Video</Name>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>Immobile</Name>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Expression>it ? 255 : 0</scr:Expression>
+      </Expression>
+      <Expression xsi:type="PropertyMapping">
+        <PropertyMappings>
+          <Property Name="FillValue" Selector="it,it,it,it" />
+        </PropertyMappings>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="cv:MaskPolygon">
+          <cv:Regions>
+            <cv:ArrayOfPoint>
+              <cv:Point>
+                <cv:X>31</cv:X>
+                <cv:Y>443</cv:Y>
+              </cv:Point>
+              <cv:Point>
+                <cv:X>-18</cv:X>
+                <cv:Y>443</cv:Y>
+              </cv:Point>
+              <cv:Point>
+                <cv:X>-18</cv:X>
+                <cv:Y>510</cv:Y>
+              </cv:Point>
+              <cv:Point>
+                <cv:X>31</cv:X>
+                <cv:Y>510</cv:Y>
+              </cv:Point>
+            </cv:ArrayOfPoint>
+          </cv:Regions>
+          <cv:MaskType>ToZeroInv</cv:MaskType>
+          <cv:FillValue>
+            <cv:Val0>255</cv:Val0>
+            <cv:Val1>255</cv:Val1>
+            <cv:Val2>255</cv:Val2>
+            <cv:Val3>255</cv:Val3>
+          </cv:FillValue>
+        </Combinator>
+      </Expression>
     </Nodes>
     <Edges>
       <Edge From="0" To="6" Label="Source1" />
       <Edge From="1" To="17" Label="Source2" />
       <Edge From="2" To="3" Label="Source1" />
       <Edge From="3" To="20" Label="Source2" />
-      <Edge From="4" To="25" Label="Source2" />
+      <Edge From="4" To="26" Label="Source2" />
       <Edge From="5" To="6" Label="Source2" />
       <Edge From="6" To="7" Label="Source1" />
       <Edge From="7" To="8" Label="Source1" />
@@ -284,15 +333,20 @@
       <Edge From="23" To="24" Label="Source1" />
       <Edge From="24" To="25" Label="Source1" />
       <Edge From="25" To="26" Label="Source1" />
-      <Edge From="27" To="28" Label="Source1" />
+      <Edge From="26" To="27" Label="Source1" />
       <Edge From="28" To="29" Label="Source1" />
       <Edge From="29" To="30" Label="Source1" />
-      <Edge From="31" To="32" Label="Source1" />
+      <Edge From="30" To="31" Label="Source1" />
       <Edge From="32" To="33" Label="Source1" />
       <Edge From="33" To="34" Label="Source1" />
-      <Edge From="35" To="36" Label="Source1" />
+      <Edge From="34" To="35" Label="Source1" />
       <Edge From="36" To="37" Label="Source1" />
-      <Edge From="38" To="39" Label="Source1" />
+      <Edge From="37" To="38" Label="Source1" />
+      <Edge From="39" To="40" Label="Source1" />
+      <Edge From="41" To="45" Label="Source1" />
+      <Edge From="42" To="43" Label="Source1" />
+      <Edge From="43" To="44" Label="Source1" />
+      <Edge From="44" To="45" Label="Source2" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

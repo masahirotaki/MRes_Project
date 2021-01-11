@@ -1,6 +1,9 @@
 %% Freezing time Analysis
 %% Load Data
-cd 'C:\Users\masah\OneDrive\Documents\GitHub\MRes_Project\Bonsai\Freezing_detection'
+clear
+% cd 'C:\Users\masah\OneDrive\Documents\GitHub\MRes_Project\Bonsai\Freezing_detection'
+cd C:\Users\masah\OneDrive\Documents\GitHub\MRes_Project\Analysis\Freezing
+
 files2import = dir('Immobility*.csv')
 
 %% Immobility detection (put each immobility epoch into one cell for later analysis )
@@ -32,6 +35,6 @@ for i = 1:length(immobility)
 end
 clear i j
 
-sprintf(['The amount of time spent freezing for CNO mice was %.2f.\n'...
-    'The amount of time spent freezing for vehicle mice was %.2f.'],freezetime(1),freezetime(2))
+sprintf(['The amount of time spent freezing:\n CNO1 %.2f Sec\n Control1 %.2f Sec\n '...
+    'CNO2 %.2f Sec\n Control2 %.2f Sec\n'],freezetime(1),freezetime(2),freezetime(3),freezetime(4))
         
